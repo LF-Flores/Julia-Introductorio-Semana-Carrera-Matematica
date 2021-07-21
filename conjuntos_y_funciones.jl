@@ -24,6 +24,9 @@ Para comenzar a ilustrar el punto de ello, consideremos lo que en Julia (y mucho
 # ╔═╡ 49d3d127-c964-4494-94c2-c7f0123ba0d9
 Integer <: Real
 
+# ╔═╡ debb0d4f-f029-4067-920c-cc049cd83adc
+Real <: Integer
+
 # ╔═╡ 8db92bb9-1a1d-4398-9fc6-72734976c816
 md"Lo anterior se entiende como la declaración común en matemáticas de que los números enteros son un **subconjunto** de los números reales, pero es código de Julia... y esos de arriba son 'tipos'."
 
@@ -40,6 +43,12 @@ Las computadoras actuales entienden la información en términos de representaci
 # ╔═╡ beda1f98-d17f-4915-819d-24a1dbe3b837
 Int64.isbitstype, Int32.isbitstype,  Int16.isbitstype
 
+
+# ╔═╡ cae300fc-5dbc-447f-8f16-5e4d2ec98633
+Integer.isbitstype
+
+# ╔═╡ 5e771978-db46-409f-a91e-d66d6182340c
+bitstring(Int16(5))
 
 # ╔═╡ 4b60ab09-19ce-4501-b8da-20a667fdce52
 Int64.isconcretetype, Int32.isconcretetype, Int16.isconcretetype
@@ -96,12 +105,21 @@ md"Aunque aun es posible verificar que son ambos representaciones distintas de u
 # ╔═╡ 4a3e5c65-69da-428d-bce5-7f1348868657
 Int8(10) == Int16(10) # La doble igualdad de valores, o una más "abstracta"
 
+# ╔═╡ 28529472-2bda-44f1-9b17-8d9674fdd5f7
+# Int8(200) == Int64(200) # Esto da error por que 200 es muy grande para 8 bits
+
+# ╔═╡ 76bee316-0bfd-44f7-ab57-976a4ba56c11
+typemax(Int8)
+
 # ╔═╡ 244cfe8d-ad8e-49d2-8a28-9abbfed36d96
 md"
 En pocas palabras, Ambos `Int16` e `Int8` son subconjuntos de `Integer`, pero entre ellos, formalmente, no podemos hacer una relación a pesar que de forma intuitiva es claro que es el mismo número (como hemos visto que se puede verificar con `==`)
 
 Para esto, Julia utiliza la función `convert`.
 "
+
+# ╔═╡ aefc90c8-a2eb-465f-9584-3f2224bfe5b6
+typeof(convert(Int16, 10))
 
 # ╔═╡ 350ab8e1-d0c2-4a5f-a8a1-c51f2d4f429a
 convert(Int8, 10) |> typeof
@@ -119,6 +137,9 @@ md"Como ilustración, podemos realizar operaciones como la siguiente:"
 
 # ╔═╡ ba33bfcc-1bee-4ada-b97f-0c88466d75a2
 10 |> Int8 |> bitstring |> length
+
+# ╔═╡ 22578cb2-8609-4504-8c24-06635967ccae
+length(bitstring(Int8(10)))
 
 # ╔═╡ 18430d41-e129-4614-aa63-4992db146a15
 md"
@@ -154,6 +175,12 @@ Por otra parte, como caso especial de los tipos concretos, tenemos los 'tipos bi
 # ╔═╡ 552a2916-d4d7-4a8a-8ce0-04099dac3e5b
 Int64.isbitstype, Integer.isbitstype
 
+# ╔═╡ 00cf2b2f-db7b-4aca-b66a-f5e245c0a9b8
+subtypes(Int64)
+
+# ╔═╡ 57d98383-9aa4-4ea8-abd5-aa5f983482f8
+typeintersect(Int64, Int32)
+
 # ╔═╡ 4180a87e-d0f6-473f-b96c-525230ac2153
 md"Un ejemplo de un conjunto se elementos que puede ser representado en memoria de la computadora (tipo concreto) pero no como una sencilla cadena de bits es el vector con entradas de tipo `Int64`:"
 
@@ -172,8 +199,23 @@ Number |> subtypes
 # ╔═╡ 88e6559a-cad0-4e49-afc1-af31c4cc0ad2
 Real |> subtypes
 
+# ╔═╡ dc28040c-b779-420c-979f-9f525112d481
+1//2 |> typeof 
+
+# ╔═╡ 2eab181d-03e1-49f2-adeb-233a769087ee
+(2+5im)//(6) |> typeof
+
 # ╔═╡ a50634b5-e6fa-4b15-b80d-352815d9eb1b
 AbstractFloat |> subtypes
+
+# ╔═╡ c65b82c6-a851-42e7-bda9-9873a995fc6e
+π |> typeof
+
+# ╔═╡ 5e6dc109-b34b-4402-8c63-a1f90782e530
+2.0 |> typeof
+
+# ╔═╡ 5512c6a1-3cad-474d-be76-672ce48903c4
+2.04 |> bitstring
 
 # ╔═╡ 3c3600a9-e57a-4ac2-b996-b2395ab62b0a
 md"Este es un vistazo de la jerarquía de conjuntos bajo el conjunto abstracto `Number`. La forma correcta de pensar en `Number` es que es el conjunto de toda entidad *'que se comporta como número'*. Esto podría incluir, por ejemplo, a los cuaterniones, a los p-ádicos, a los multivectores o cualquier objeto que *'tenga las operaciones y funciones que un número tendría'*. En particular, incluye a los números complejos como vemos en el diagrama.
@@ -244,6 +286,9 @@ Union{}
 # ╔═╡ ff621270-7f72-49b6-8f61-8d6a477d0cb1
 subtypes(Union{})
 
+# ╔═╡ c24e66fa-eca8-4acb-8e09-9101ff8677ad
+Int64 |> subtypes
+
 # ╔═╡ be7598e9-4beb-4338-be16-0aae10987051
 Union{} <: Integer, Union{} <: Int64, Union{} <: Union{}
 
@@ -304,6 +349,12 @@ typeintersect(AbstractFloat, Integer)
 
 # ╔═╡ 329ef148-9988-41df-8225-ac48942ce8ce
 typeintersect(Union{Float64, Int64, Float32}, AbstractFloat)
+
+# ╔═╡ 3bf72263-4afd-41ea-a41f-3f9976c2c87e
+typeintersect(typeintersect(typeintersect(Union{Int32, Bool, Char}, Union{Char, Any}), Any), Union{Unsigned, Signed})
+
+# ╔═╡ 3fa33c74-3adf-4f73-8ebf-d8e8cbd8d453
+'🐰' |> typeof
 
 # ╔═╡ 72bee22a-a78a-4171-a016-8b4348ff39b9
 md"Vemos que tenemos las propiedades esperadas de una operación de intersección de conjuntos. 
@@ -371,6 +422,12 @@ En Julia tenemos el concepto de **multiple dispatch** que traducido podría ente
 # ╔═╡ b664d583-ec0d-4713-bbd3-c0c5a5a70222
 f(z::Complex) = real(z)
 
+# ╔═╡ aa74c32c-8e5f-42ea-b762-9f4a369d0fcd
+f(x::Integer) = x - 5
+
+# ╔═╡ a1e2f72a-a8f6-4048-b5e5-f922259dfc67
+f(x::Int64) = √x
+
 # ╔═╡ e3ea8720-26d4-46b6-8f5b-a3b66bba7910
 f(2)
 
@@ -382,6 +439,12 @@ f(π)
 
 # ╔═╡ a5efac21-a4f7-4531-945e-8c0f5003ec0c
 f(3+im)
+
+# ╔═╡ 44465bbb-4df1-4465-8f97-cd89d36d7f50
+f(5)
+
+# ╔═╡ 98348a61-0fb0-46e5-a795-b76e2f3533b3
+f(2.0) 
 
 # ╔═╡ eb9d82e1-3637-4f84-adbe-0111716f0993
 md"Pero.. ¿No es `Real <: Complex` y entonces la definición reciente debería aplicar también para `Real`? ¿No habrá conflicto?
@@ -415,6 +478,24 @@ end
 
 # ╔═╡ 93a038b8-019e-457b-b92a-83fa2bb01db2
 miFunción("prueba")
+
+# ╔═╡ c558b408-9cef-4848-83f5-03a6948ce0f6
+5 ≠ 5.0 
+
+# ╔═╡ 7b81bfb5-38ee-45bf-a97f-3a39c2009270
+5 ≥ 5
+
+# ╔═╡ e596a83c-e13b-40b3-8a67-b2acb019f2f7
+(f ∘ f)(10)
+
+# ╔═╡ b934d565-f9ba-4be4-a3b3-177a07282a7a
+[1,2] ∪ [2,4] 
+
+# ╔═╡ 62371834-034d-4d3b-939f-d8e8d69c8a21
+∩
+
+# ╔═╡ f20630d8-3def-44a0-a875-2832d11855c8
+[1,0,0] × [0,0,1]
 
 # ╔═╡ f1d27a48-4924-4ed3-bf27-59de5b312918
 md"aquí han ocurrido varias cosas que valen la pena comentar.
@@ -522,6 +603,9 @@ md"Esta trae muchas funciones de álgebra lineal numérica. Pero cuando decimos 
 
 Notemos: Tenemos por ejemplo el caso de la función genérica `factorize` que, tal cual como es común en julia, tiene un nombre sencillo que expresa un verbo asociado a su acción. `factorize` tiene métodos que le permiten *reaccionar* al tipo de matriz que tiene como argumento y utilizar técnicas distintas de factorización:"
 
+# ╔═╡ 1a044da9-8fe8-447e-8761-255d81920644
+factorize
+
 # ╔═╡ bf1226a6-78dd-4611-840b-93859b9fa7a9
 factorize([2 -1 0; -1 2 -1; 0 -1 2])
 
@@ -531,7 +615,27 @@ factorize([1 2 3;
 		   3 4 1])
 
 # ╔═╡ 7d435b4f-dbab-48fc-9ebb-504ccfeaad62
-md"## Tipos compuestos, estudio de caso: Vectores"
+md"## Tipos compuestos, estudio de caso: Vectores
+
+Los vectores en Julia son un caso especial del tipo `AbstractArray{T,N}`. Esto es lo que llamamos un **tipo paramétrico**. Es decir, es un conjunto que para ser completamente especificado, depende de parámetros. En este caso `T` (el tipo de las entradas del arreglo) y `N` (el número de dimensiones o grados de libertad). 
+
+Realmente podemos pensar también en los tipos paramétricos como conjuntos que son **uniones de muchos conjuntos a lo largo de todos los posibles valores que tomen sus parámetros**. Es decir,
+
+`AbstractArray{T,N}` = $\displaystyle \bigcup_{t \in T,\ n \in N}$ `AbstractArray{t,n}`
+
+Esto se formalizará en breve cuando hablemos de estos tipos de datos llamados **UnionAll**. Por los momentos, miremos el ejemplo de un vector:"
+
+# ╔═╡ 74976ad7-aa26-4a24-b25f-48165851153d
+[1, 2, 3]
+
+# ╔═╡ 544ebf57-936c-4cc1-b94e-a17d1110e59a
+[1, 2, 3] |> typeof
+
+# ╔═╡ 43ca5d5b-2e10-41c0-81ce-42cc344deb00
+[1.0, 2.0, 3.0] |> typeof
+
+# ╔═╡ ec7c769e-4e7b-4857-aa28-7cdf0d732378
+[1, 2, 3.0] |> typeof
 
 # ╔═╡ 53f3e8da-7681-4908-b9c9-51c7ecda9b46
 md"## UnionAll: Tipos paramétricos"
@@ -617,10 +721,13 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╔═╡ Cell order:
 # ╟─8e7c9226-ddee-11eb-3e73-3112eb059eb7
 # ╠═49d3d127-c964-4494-94c2-c7f0123ba0d9
+# ╠═debb0d4f-f029-4067-920c-cc049cd83adc
 # ╟─8db92bb9-1a1d-4398-9fc6-72734976c816
 # ╠═205e451b-cabb-4d52-b041-eeb5ce0bacbc
 # ╟─4b567441-f60e-4a6f-a4ea-ef961762e7f0
 # ╠═beda1f98-d17f-4915-819d-24a1dbe3b837
+# ╠═cae300fc-5dbc-447f-8f16-5e4d2ec98633
+# ╠═5e771978-db46-409f-a91e-d66d6182340c
 # ╠═4b60ab09-19ce-4501-b8da-20a667fdce52
 # ╟─627c5ca8-eed8-4dae-bf28-1c41996e70f6
 # ╠═b145a130-cc8e-4431-bfd2-ed85130b95a5
@@ -635,13 +742,17 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═82da2de9-d202-43d1-ab7d-c6c7f8e3ee55
 # ╟─919fc101-078d-4e00-9fbe-3be7c677572e
 # ╠═4a3e5c65-69da-428d-bce5-7f1348868657
+# ╠═28529472-2bda-44f1-9b17-8d9674fdd5f7
+# ╠═76bee316-0bfd-44f7-ab57-976a4ba56c11
 # ╟─9938ab35-34c9-4578-aa01-25968e7a5812
 # ╟─244cfe8d-ad8e-49d2-8a28-9abbfed36d96
+# ╠═aefc90c8-a2eb-465f-9584-3f2224bfe5b6
 # ╠═350ab8e1-d0c2-4a5f-a8a1-c51f2d4f429a
 # ╟─e5db8570-7dc0-48e3-85bd-34feaacdc4a8
 # ╠═da194735-2d45-4af7-bd9c-3b24acb73e3a
 # ╟─48706abb-afb7-4533-bd8a-ac914b5ea692
 # ╠═ba33bfcc-1bee-4ada-b97f-0c88466d75a2
+# ╠═22578cb2-8609-4504-8c24-06635967ccae
 # ╟─18430d41-e129-4614-aa63-4992db146a15
 # ╠═63df9020-91d3-48ea-8842-bff38784a5c2
 # ╟─03911b4f-7f2f-4052-ba88-a329fd43306a
@@ -650,13 +761,20 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═91c7ca22-ff23-4c6f-a325-69e02aa7c05e
 # ╟─86c92f6a-aaeb-4d83-bb5c-66e7e2b523e0
 # ╠═552a2916-d4d7-4a8a-8ce0-04099dac3e5b
+# ╠═00cf2b2f-db7b-4aca-b66a-f5e245c0a9b8
+# ╠═57d98383-9aa4-4ea8-abd5-aa5f983482f8
 # ╟─4180a87e-d0f6-473f-b96c-525230ac2153
 # ╠═7a9b78f3-f872-4f35-b00d-cbbbef4f386c
 # ╟─fb5917ee-edf4-4b2f-91dc-827219c50974
 # ╠═423ab2d4-d048-4573-b2cb-3558ff265a62
 # ╠═5bfb0f96-39d1-4db0-81f6-8988fa613afe
 # ╠═88e6559a-cad0-4e49-afc1-af31c4cc0ad2
+# ╠═dc28040c-b779-420c-979f-9f525112d481
+# ╠═2eab181d-03e1-49f2-adeb-233a769087ee
 # ╠═a50634b5-e6fa-4b15-b80d-352815d9eb1b
+# ╠═c65b82c6-a851-42e7-bda9-9873a995fc6e
+# ╠═5e6dc109-b34b-4402-8c63-a1f90782e530
+# ╠═5512c6a1-3cad-474d-be76-672ce48903c4
 # ╟─3c3600a9-e57a-4ac2-b996-b2395ab62b0a
 # ╟─1d64b3df-f57a-4e4b-abf7-e6cbf99b7778
 # ╠═d83268e9-28ae-46f6-8f86-3e6fa739094b
@@ -675,6 +793,7 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╟─acc308af-6c79-49e6-9568-4d1dca3d69e6
 # ╠═8e697f02-fdbd-4bdc-9e79-61eec5ec89a4
 # ╠═ff621270-7f72-49b6-8f61-8d6a477d0cb1
+# ╠═c24e66fa-eca8-4acb-8e09-9101ff8677ad
 # ╠═be7598e9-4beb-4338-be16-0aae10987051
 # ╟─f8b37afc-816c-4050-a7f6-8585859bd3d4
 # ╠═3af58fab-af03-40c9-8807-fcc34fa2066b
@@ -693,6 +812,8 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═3b63818b-4ce3-4347-a0b2-5680590d185e
 # ╠═3ca8523e-988e-4ef4-8f4e-3edb43958b70
 # ╠═329ef148-9988-41df-8225-ac48942ce8ce
+# ╠═3bf72263-4afd-41ea-a41f-3f9976c2c87e
+# ╠═3fa33c74-3adf-4f73-8ebf-d8e8cbd8d453
 # ╟─72bee22a-a78a-4171-a016-8b4348ff39b9
 # ╠═981f14ad-dcfc-4009-bb0a-fcbfd2657648
 # ╠═8152c80b-d4e1-4b66-93e8-be42ede8e1dd
@@ -712,11 +833,21 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╟─ba03c65f-a538-4624-a672-ef47722b4a33
 # ╠═b664d583-ec0d-4713-bbd3-c0c5a5a70222
 # ╠═a5efac21-a4f7-4531-945e-8c0f5003ec0c
+# ╠═aa74c32c-8e5f-42ea-b762-9f4a369d0fcd
+# ╠═a1e2f72a-a8f6-4048-b5e5-f922259dfc67
+# ╠═44465bbb-4df1-4465-8f97-cd89d36d7f50
+# ╠═98348a61-0fb0-46e5-a795-b76e2f3533b3
 # ╟─eb9d82e1-3637-4f84-adbe-0111716f0993
 # ╠═7101ef15-8b80-49f9-a8e4-8f2432827e73
 # ╟─e05a113e-1caf-4784-aa53-7f40c47a870f
 # ╠═b05d7c05-ac71-4870-9e1c-790e3cceecff
 # ╠═93a038b8-019e-457b-b92a-83fa2bb01db2
+# ╠═c558b408-9cef-4848-83f5-03a6948ce0f6
+# ╠═7b81bfb5-38ee-45bf-a97f-3a39c2009270
+# ╠═e596a83c-e13b-40b3-8a67-b2acb019f2f7
+# ╠═b934d565-f9ba-4be4-a3b3-177a07282a7a
+# ╠═62371834-034d-4d3b-939f-d8e8d69c8a21
+# ╠═f20630d8-3def-44a0-a875-2832d11855c8
 # ╟─f1d27a48-4924-4ed3-bf27-59de5b312918
 # ╠═1688a976-9412-4632-96bb-f3352a6104b1
 # ╠═2f515623-3173-4273-b761-11111baa71f7
@@ -730,9 +861,14 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╟─aba32638-d45f-4bf4-8892-b4afe7837dc5
 # ╠═84e1cf74-d1ec-4a62-b6eb-8724a7845c2e
 # ╟─afb0c0c7-7a0d-4292-958c-02e085cece41
+# ╠═1a044da9-8fe8-447e-8761-255d81920644
 # ╠═bf1226a6-78dd-4611-840b-93859b9fa7a9
 # ╠═270f04a2-bcd6-4122-9710-620993257535
-# ╠═7d435b4f-dbab-48fc-9ebb-504ccfeaad62
+# ╟─7d435b4f-dbab-48fc-9ebb-504ccfeaad62
+# ╠═74976ad7-aa26-4a24-b25f-48165851153d
+# ╠═544ebf57-936c-4cc1-b94e-a17d1110e59a
+# ╠═43ca5d5b-2e10-41c0-81ce-42cc344deb00
+# ╠═ec7c769e-4e7b-4857-aa28-7cdf0d732378
 # ╠═53f3e8da-7681-4908-b9c9-51c7ecda9b46
 # ╠═d96d6da8-7505-451a-9d68-2ae5c70ce55a
 # ╠═a2550528-734f-4658-a649-06c654b79151
