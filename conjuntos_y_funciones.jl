@@ -476,14 +476,26 @@ function miFunción(texto::String)
 	return "¡Hola! El texto recibido fue: $(texto)"
 end
 
+# ╔═╡ abc74d08-dc46-4398-97ec-406ef8608a35
+'🐰'
+
 # ╔═╡ 93a038b8-019e-457b-b92a-83fa2bb01db2
-miFunción("prueba")
+miFunción("montaña")
 
 # ╔═╡ c558b408-9cef-4848-83f5-03a6948ce0f6
 5 ≠ 5.0 
 
 # ╔═╡ 7b81bfb5-38ee-45bf-a97f-3a39c2009270
 5 ≥ 5
+
+# ╔═╡ 7b71d775-4540-4e36-8695-a8e40db9fbf6
+π ≈ π - √eps(Float64)
+
+# ╔═╡ 23ad64bd-ddcf-4544-aa50-45c1f62b4801
+√eps(Float64)
+
+# ╔═╡ c8ec4b83-f54b-4117-bd29-9317e63be499
+1.0 + eps(Float64)
 
 # ╔═╡ e596a83c-e13b-40b3-8a67-b2acb019f2f7
 (f ∘ f)(10)
@@ -522,7 +534,7 @@ md"Por supuesto, el cuerpo de las funciones con la sintaxis anterior puede ser m
 Una última forma de definir funciones es:"
 
 # ╔═╡ 0bd992a7-d333-4235-8bc8-554a76ef04e5
-otraForma(texto::String, n::Integer) = begin
+otraForma(texto::String, n) = begin
 	resultado = ""
 	for i ∈ 1:n
 		resultado *= texto
@@ -530,8 +542,24 @@ otraForma(texto::String, n::Integer) = begin
 	return resultado
 end
 
+# ╔═╡ 2d484489-4786-489e-86c7-53b669878935
+md"Ejemplo de uso de scope local con la keyword `let`"
+
+# ╔═╡ eaef40eb-df5f-42ce-868f-e3200f0c5365
+let x = 5
+	y = 20
+	# --- Hice cálculos
+	x + y
+end
+
 # ╔═╡ 744e7ab3-fcfe-488e-8805-812135425e75
-otraForma("Hola", 5)
+otraForma("Hola", 4)
+
+# ╔═╡ 832b7bc6-0341-4560-8660-d1862351944d
+otraForma("Hola", 2.0)
+
+# ╔═╡ 01e94a33-76af-40ad-9846-dad66cedb37e
+"Hola " * "¿Cómo están?"
 
 # ╔═╡ 49a83604-134d-48a2-bf95-d8a6cb946da7
 md"De nuevo, hagamos un desglose de lo que sucedió arriba:
@@ -553,7 +581,7 @@ md"De nuevo, hagamos un desglose de lo que sucedió arriba:
 "
 
 # ╔═╡ 0b0446dc-ca43-409e-bc3d-5eaaca17c117
-nombre = "Mauricio"
+nombre = "Luis"
 
 # ╔═╡ 510167e1-e4d3-48b0-a4cb-c42e728a1db2
 "¡Hola, " * nombre * " ¿Cómo estás?"
@@ -636,6 +664,30 @@ Esto se formalizará en breve cuando hablemos de estos tipos de datos llamados *
 
 # ╔═╡ ec7c769e-4e7b-4857-aa28-7cdf0d732378
 [1, 2, 3.0] |> typeof
+
+# ╔═╡ 86c2ebb9-9380-404a-8397-0efd2233ba96
+md"También podemos definir los vectores de esta manera:"
+
+# ╔═╡ 18a99b10-f9d0-4294-98b9-267cfe3fe2aa
+[1 2 3]
+
+# ╔═╡ f5ff1497-7553-4c45-85c2-34aacf32c2d8
+md"... Excepto que como pueden notar, el tipo del objeto es diferente. Esto es por que hemos definido realmente una **matriz fila**. Los vectores en Julia son, por defecto, isomorfos a las matrices columna. Intentemos definir de esos:"
+
+# ╔═╡ 32fb002e-4ecc-4e6b-bee3-98cd46f7a3d4
+[1; 2; 3] |> typeof
+
+# ╔═╡ 21698e47-4fae-423f-b38c-e4160a946507
+md"¡Perfecto! Funcionó. Ahora, el caso general es cuando tenemos una matriz con varias columnas y filas:"
+
+# ╔═╡ 1a46f05b-7e83-4986-b2de-3f57ae7126a0
+[1 2 3; 2 3 4; 3 4 5]
+
+# ╔═╡ 3a7c72b3-f98d-4e8a-a426-409e9bc2273a
+md"### Operaciones sobre vectores"
+
+# ╔═╡ 3cd266c7-cd8c-4bda-855e-168afcf9ad36
+v⃗ = [1.0, 2.0, 3.0]
 
 # ╔═╡ 53f3e8da-7681-4908-b9c9-51c7ecda9b46
 md"## UnionAll: Tipos paramétricos"
@@ -841,9 +893,13 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═7101ef15-8b80-49f9-a8e4-8f2432827e73
 # ╟─e05a113e-1caf-4784-aa53-7f40c47a870f
 # ╠═b05d7c05-ac71-4870-9e1c-790e3cceecff
+# ╠═abc74d08-dc46-4398-97ec-406ef8608a35
 # ╠═93a038b8-019e-457b-b92a-83fa2bb01db2
 # ╠═c558b408-9cef-4848-83f5-03a6948ce0f6
 # ╠═7b81bfb5-38ee-45bf-a97f-3a39c2009270
+# ╠═7b71d775-4540-4e36-8695-a8e40db9fbf6
+# ╠═23ad64bd-ddcf-4544-aa50-45c1f62b4801
+# ╠═c8ec4b83-f54b-4117-bd29-9317e63be499
 # ╠═e596a83c-e13b-40b3-8a67-b2acb019f2f7
 # ╠═b934d565-f9ba-4be4-a3b3-177a07282a7a
 # ╠═62371834-034d-4d3b-939f-d8e8d69c8a21
@@ -853,7 +909,11 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═2f515623-3173-4273-b761-11111baa71f7
 # ╟─943d00c7-5dec-4e13-84ee-3ad55b676f69
 # ╠═0bd992a7-d333-4235-8bc8-554a76ef04e5
+# ╟─2d484489-4786-489e-86c7-53b669878935
+# ╠═eaef40eb-df5f-42ce-868f-e3200f0c5365
 # ╠═744e7ab3-fcfe-488e-8805-812135425e75
+# ╠═832b7bc6-0341-4560-8660-d1862351944d
+# ╠═01e94a33-76af-40ad-9846-dad66cedb37e
 # ╟─49a83604-134d-48a2-bf95-d8a6cb946da7
 # ╠═0b0446dc-ca43-409e-bc3d-5eaaca17c117
 # ╠═510167e1-e4d3-48b0-a4cb-c42e728a1db2
@@ -869,7 +929,15 @@ estamos guardando el objeto `#793817`, que pertenece al conjunto/tipo `Function`
 # ╠═544ebf57-936c-4cc1-b94e-a17d1110e59a
 # ╠═43ca5d5b-2e10-41c0-81ce-42cc344deb00
 # ╠═ec7c769e-4e7b-4857-aa28-7cdf0d732378
-# ╠═53f3e8da-7681-4908-b9c9-51c7ecda9b46
+# ╟─86c2ebb9-9380-404a-8397-0efd2233ba96
+# ╠═18a99b10-f9d0-4294-98b9-267cfe3fe2aa
+# ╟─f5ff1497-7553-4c45-85c2-34aacf32c2d8
+# ╠═32fb002e-4ecc-4e6b-bee3-98cd46f7a3d4
+# ╟─21698e47-4fae-423f-b38c-e4160a946507
+# ╠═1a46f05b-7e83-4986-b2de-3f57ae7126a0
+# ╟─3a7c72b3-f98d-4e8a-a426-409e9bc2273a
+# ╠═3cd266c7-cd8c-4bda-855e-168afcf9ad36
+# ╟─53f3e8da-7681-4908-b9c9-51c7ecda9b46
 # ╠═d96d6da8-7505-451a-9d68-2ae5c70ce55a
 # ╠═a2550528-734f-4658-a649-06c654b79151
 # ╠═c400e7ba-0969-4733-a173-5fa505d3c30d
