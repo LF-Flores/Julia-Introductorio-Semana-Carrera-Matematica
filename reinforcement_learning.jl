@@ -156,7 +156,7 @@ fill(0,10)
 randn(10)
 
 # ╔═╡ 7cfa0f3b-42e1-4f91-872a-a94bb469a5eb
-KBanditProblem(problem_size = 10)
+KBanditProblem{10}(problem_size = 10)
 
 # ╔═╡ Cell order:
 # ╠═c4762a58-ea79-11eb-182d-f9478bb8e494
